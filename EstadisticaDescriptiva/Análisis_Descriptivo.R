@@ -1,25 +1,22 @@
-install.packages('tseries') # instalar la libreria
-
-library(tseries)
-
+library(ggplot2)
 # Leer los datos
-datosHist <- read.csv('/home/wilson/Documentos/cafe/datosHist.csv')
+setwd("~/Documentos/Cafe") # Establecer ruta de trabajo
+datosHist <- read.csv('datosHist.csv')
+datosHist$Fecha <- as.Date(datosHist$Fecha)
 
-# Verificar estacionariedad
-adf.test(datosHist)
+KCN4 <- ts(datosHist$precio_promedio,freq=12)
+plot(datosHist$Fecha, KCN4, type = "l", xlab = "Fecha", 
+     ylab = "Precio Promedio", main = "Precios del Café")
 
-# Descomponer la serie temporal
-decompose(datosHist)
+plot(diff(KCN4)) # calculo de la variación
 
-# Analizar tendencias
-plot.ts(datosHist)
-lines(fitted(datosHist), col = 'red')
+plot(log(KCN4)) #  útil para estabilizar la varianza y transformar los datos en una escala logarítmica.
 
-# Modelos de pronóstico
-# ARIMA
-fit_arima <- arima(datosHist, order = c(1,1,1))
-forecast_arima <- forecast(fit_arima, h = 30)
+plot(diff(log(KCN4))) 
+abline(h=0)
 
-# ETS
-fit_ets <- ets(datosHist)
-forecast_ets <- forecast(fit_ets, h = 30)
+
+descomposicion <- decompose(KCN4, type = "additive")
+
+plot(descomposicion)
+
