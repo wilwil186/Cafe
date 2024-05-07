@@ -1,0 +1,136 @@
+---
+title: "Informe del Análisis Descriptivo"
+author: "Santiago Montejo, Angel Granados, Wilson Jerez"
+date: "Abril 2024"
+output:
+  beamer_presentation: 
+    theme: "Warsaw"
+---
+
+
+# Introducción
+El presente informe tiene como objetivo analizar y visualizar los precios del café a lo largo del tiempo. Se utilizarán técnicas de análisis descriptivo para explorar las tendencias y patrones en los datos.
+
+# Carga de bibliotecas y datos
+```{r}
+library(ggplot2)
+library(urca)
+
+setwd("~/Documentos/Cafe") # Establecer ruta de trabajo
+datosHist <- read.csv('datosHist.csv')
+datosHist$Fecha <- as.Date(datosHist$Fecha)
+```
+
+
+# Serie de tiempo de todos los datos
+
+```{r}
+KCN4 <- ts(datosHist$precio_promedio,freq=12)
+plot(datosHist$Fecha, KCN4, type = "l", xlab = "Fecha", 
+     ylab = "Precio Promedio", main = "Precios del Café")
+```
+
+# Serie de tiempo por año 
+
+```{r}
+# Crear un bucle for para particionar los datos por año
+for (i in 1980:2023) {
+  start_date <- as.Date(paste(i, "-01-01", sep = ""))
+  end_date <- as.Date(paste(i + 1, "-01-01", sep = ""))
+  
+  datosporAño <- subset(datosHist, 
+                        Fecha >= start_date 
+                        & Fecha < end_date)
+  KCN4porAño <- ts(datosporAño$precio_promedio, 
+                   frequency = 12)
+  assign(paste0("Datos_Hist_", i), datosporAño)
+  assign(paste0("KCN4_", i), KCN4porAño)
+}
+```
+
+#
+```{r}
+
+plot(Datos_Hist_2000$Fecha, KCN4_2000, type = "l", 
+     xlab = "Fecha", 
+     ylab = "Precio Promedio", main = "Precios del Café")
+```
+
+
+# Cálculo de la variación de las series de tiempo 
+
+```{r}
+plot(diff(log(KCN4))) 
+abline(h=0)
+
+```
+
+#
+```{r}
+plot(diff(log(KCN4_2000))) 
+abline(h=0)
+```
+
+
+# Descomposición de la serie de tiempo
+
+```{r}
+decomposition_2000 <- decompose(KCN4_2000, 
+                                type = "additive")
+plot(decomposition_2000$x, 
+     ylab = "Serie de Tiempo Original", xlab = "")
+```
+
+#
+```{r}
+plot(decomposition_2000$trend, 
+     ylab = "Tendencia", xlab = "")
+```
+
+#
+```{r}
+plot(decomposition_2000$seasonal, 
+     ylab = "Estacionalidad", xlab = "")
+```
+
+#
+```{r}
+plot(decomposition_2000$random, 
+     ylab = "Residuales", xlab = "")
+```
+
+# Análisis de tendencia
+
+```{r}
+plot(decomposition_2000$x, 
+     ylab = "Serie de Tiempo Original", xlab = "")
+abline(lm(decomposition_2000$x 
+          ~ time(decomposition_2000$x)), col = "red")
+```
+
+
+#
+```{r}
+plot(decomposition_2000$trend, 
+     ylab = "Tendencia", xlab = "")
+```
+
+# Estacionariedad
+
+```{r}
+#install.packages("urca")
+library(urca)
+adf_test <- ur.df(KCN4_2000, type = "trend", lags = 1)
+summary(adf_test)
+```
+
+# AUTOCORRELACIÓN por año
+
+```{r}
+autocorrelation <- acf(KCN4_2000, type = "correlation")
+```
+
+# Conclusión
+En este informe, se han analizado y visualizado los precios del café a lo largo del tiempo utilizando técnicas de análisis 
+descriptivo. Se han identificado tendencias y patrones en los datos, y se han aplicado técnicas de estabilización de la v
+arianza y descomposición de la serie de tiempo. Además, se ha calculado y graficado la autocorrelación para cada año.

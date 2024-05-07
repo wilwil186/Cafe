@@ -1,0 +1,9 @@
+\frametitle{AUTOCORRELACIÓN por año}
+\protect\hypertarget{autocorrelaciuxf3n-por-auxf1o}{}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{autocorrelation }\OtherTok{\textless{}{-}} \FunctionTok{acf}\NormalTok{(KCN4\_2000, }\AttributeTok{type =} \StringTok{"correlation"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-14-1.pdf}

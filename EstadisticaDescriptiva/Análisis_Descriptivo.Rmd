@@ -1,15 +1,11 @@
 ---
-title: "Análisis de las Ventas hacia el Exterior en el Departamento de Analítica de la Federación Nacional de Cafeteros"
+title: "Informe del Análisis Descriptivo"
 author: "Santiago Montejo, Angel Granados, Wilson Jerez"
 date: "Abril 2024"
 output:
-  beamer_presentation:
-    theme: "Madrid"
-    colortheme: "beaver"
-    fonttheme: "default"
-    slide_level: 5
-  html_document: default
+  pdf_document: default
 ---
+
 ## Análisis de la Serie de Tiempo de los Precios del Café en R
 
 Para analizar la serie de tiempo de los precios del café en R, voy a seguir los siguientes pasos:
