@@ -1,7 +1,7 @@
 ---
-title: "Análisis de las Ventas hacia el Exterior en el Departamento de Analítica de la Federación Nacional de Cafeteros"
+title: "Análisis de los Datos de la Federación Nacional de Cafeteros: Exploración con Intervalos de Confianza y Pruebas de Hipótesis"
 author: "Santiago Montejo, Angel Granados, Wilson Jerez"
-date: "Abril 2024"
+date: "Mayo 2024"
 output:
   pdf_document: default
   html_document: default
@@ -9,9 +9,7 @@ bibliography: bibliografia.bib
 ---
 # Introducción
 
-La Prueba de Hipótesis es una metodología fundamental en el análisis de datos que permite a los investigadores evaluar afirmaciones sobre una población utilizando muestras de datos. Se basa en la inferencia estadística para llegar a conclusiones acerca de las características de una población en función de la evidencia proporcionada por la muestra. En la toma de decisiones basada en datos, la Prueba de Hipótesis desempeña un papel crucial al proporcionar un marco sistemático para validar o refutar afirmaciones sobre fenómenos observados.
-
-Este ensayo se centra en la aplicación de la Prueba de Hipótesis para analizar el valor promedio de las facturas de las empresas extranjeras que realizan compras a la Federación Nacional de Cafeteros. La variable de interés, "Valor_factura_USD", representa el monto total de las transacciones en dólares estadounidenses y desempeña un papel fundamental en la evaluación del rendimiento comercial de la federación en el mercado internacional del café. Exploraremos cómo la Prueba de Hipótesis puede ayudarnos a comprender mejor si hay diferencias significativas en el valor promedio de estas transacciones, lo que podría influir en las estrategias de negociación y comercio de la federación.
+En éste ensayo, nuestro objetivo es analizar los datos proporcionados por la Federación Nacional de Cafeteros para determinar el intervalo de confianza adecuado para el valor promedio de las facturas de las empresas extranjeras que realizan compras. Utilizaremos este intervalo de confianza como base para establecer una prueba de hipótesis que nos permita analizar el parámetro de interés. La variable en cuestión, "Valor_factura_USD", representa el monto total de las transacciones en dólares estadounidenses y es crucial para evaluar el rendimiento comercial de la federación en el mercado internacional del café. Exploraremos cómo la Prueba de Hipótesis puede ayudarnos a comprender mejor si hay diferencias significativas en el valor promedio de estas transacciones, lo que podría influir en las estrategias de negociación y comercio de la federación.
 
 # Selección de la Variable
 
@@ -22,19 +20,62 @@ DestinoDeEsportación <- read.csv('DestinoDeEsportación.csv')
 Valor_factura_USD <- DestinoDeEsportación$Valor_factura_USD
 ```
 
+# Selección del Intervalo de Confianza
+
+Para determinar el intervalo de confianza más adecuado de la variable seleccionada, utilizamos la siguiente función:
+
+
+```{r}
+
+calcular_intervalo_confianza <- function(nivel_confianza, alpha, coeficiente_confianza, estimador, error_estandar, limite_inferior, limite_superior) {
+  # Calcula el valor crítico según el nivel de confianza y alpha
+  valor_critico <- qnorm(1 - alpha / 2)
+  
+  # Calcula el error estándar
+  margen_error <- valor_critico * error_estandar
+  
+  # Calcula el intervalo de confianza
+  limite_inferior <- estimador - margen_error
+  limite_superior <- estimador + margen_error
+  
+  return(list(limite_inferior = limite_inferior, limite_superior = limite_superior))
+}
+
+```
+
+
+```{r}
+
+# Calcular el estimador (media) y el error estándar
+media <- mean(Valor_factura_USD, na.rm = TRUE)
+print(media)
+error_estandar <- sd(Valor_factura_USD, na.rm = TRUE) / sqrt(sum(!is.na(Valor_factura_USD)))
+print(error_estandar)
+# Parámetros para el cálculo del intervalo de confianza
+nivel_confianza <- 0.95
+alpha <- 0.05
+coeficiente_confianza <- 1.96  # Para un nivel de confianza del 95%
+
+# Llamada a la función para calcular el intervalo de confianza
+resultado_intervalo_confianza <- calcular_intervalo_confianza(nivel_confianza, alpha, coeficiente_confianza, media, error_estandar, NA, NA)
+
+# Mostrar resultado
+print(resultado_intervalo_confianza)
+
+```
 
 # Formulación de la Hipótesis
 
 En este análisis, formulamos las siguientes hipótesis:
 
-- Hipótesis Nula (H0): El valor promedio de las facturas de las empresas extranjeras que compran café a la Federación Nacional de Cafeteros es igual a $521,257.7 USD.
+- Hipótesis Nula (H0): El valor promedio de las facturas de las empresas extranjeras que compran café a la Federación Nacional de Cafeteros es igual a $555,284.7 USD.
 ```{r}
-H0 <- 521257.7
+H0 <- media
 ```
 
-- Hipótesis Alternativa (H1): El valor promedio de las facturas de las empresas extranjeras que compran café a la Federación Nacional de Cafeteros es diferente de $521,257.7 USD.
+- Hipótesis Alternativa (H1): El valor promedio de las facturas de las empresas extranjeras que compran café a la Federación Nacional de Cafeteros es diferente de $555,284.7 USD.
 
-La hipótesis nula establece una referencia a partir de la cual se puede evaluar si hay suficiente evidencia para rechazarla en favor de la hipótesis alternativa. En el contexto del análisis de datos, estas hipótesis nos permiten investigar si el valor promedio de las facturas es significativamente diferente del valor de referencia establecido, lo que puede tener implicaciones importantes para la gestión financiera y comercial de la federación.
+La hipótesis nula establece una referencia a partir de la cuál se puede evaluar si hay suficiente evidencia para rechazarla en favor de la hipótesis alternativa. En el contexto del análisis de datos, estas hipótesis nos permiten investigar si el valor promedio de las facturas es significativamente diferente del valor de referencia establecido, lo que puede tener implicaciones importantes para la gestión financiera y comercial de la federación.
 
 # Contexto de Aplicación
 
@@ -100,7 +141,7 @@ En el contexto de la Prueba de Hipótesis, existen dos tipos de errores que pued
 
 1. **Error Tipo I:**
    - Ocurre cuando se rechaza incorrectamente la hipótesis nula, aunque sea verdadera.
-   - En el análisis de las ventas hacia el exterior de la Federación Nacional de Cafeteros, un error tipo I implicaría concluir que el valor promedio de las facturas es significativamente diferente de $521,257.7 USD cuando en realidad no lo es.
+   - En el análisis de las ventas hacia el exterior de la Federación Nacional de Cafeteros, un error tipo I implicaría concluir que el valor promedio de las facturas es significativamente diferente de $555,284.7 USD. cuando en realidad no lo es.
 
 2. **Error Tipo II:**
    - Ocurre cuando se acepta incorrectamente la hipótesis nula, aunque sea falsa.
