@@ -6,7 +6,7 @@ datosHist <- read.csv('datosHist.csv')
 datosHist$Fecha <- as.Date(datosHist$Fecha)
 ### fin Datos ###
 
-### Series de timepo ###
+### Series de tiempo ###
 ## Serie de tiempo de todos los datos ##
 KCN4 <- ts(datosHist$precio_promedio,freq=12)
 plot(datosHist$Fecha, KCN4, type = "l", xlab = "Fecha", 
@@ -33,13 +33,14 @@ plot(Datos_Hist_2000$Fecha, KCN4_2000, type = "l", xlab = "Fecha",
 ### Cálculo de la variación de las series de tiempo ###
 
 #plot(diff(KCN4)) # calculo de la variación
-#plot(log(KCN4)) #  útil para estabilizar la varianza y transformar los datos en una escala logarítmica.
+#plot(log(KCN4)) #  útil para estabilizar la varianza y 
+#transformar los datos en una escala logarítmica.
 plot(diff(log(KCN4))) 
 abline(h=0)
 
 #plot(diff(KCN4_2000)) # calculo de la variación
 #plot(log(KCN4_2000)) #  útil para estabilizar la varianza y transformar los datos en una escala logarítmica.
-plot(diff(log(KCN4_2000))) 
+plot(diff(log(KCN4_2000)))
 abline(h=0)
 ### fin Cálculo de la variación de las series de tiempo ###
 
@@ -63,7 +64,8 @@ plot(decomposition_2000$seasonal, ylab = "Estacionalidad", xlab = "")
 plot(decomposition_2000$random, ylab = "Residuales", xlab = "")
 
 par(mfrow = c(1, 1)) # normal
-plot(decomposition_2000$x, ylab = "Serie de Tiempo Original", xlab = "")
+#plot(decomposition_2000$x, ylab = "Serie de Tiempo Original", xlab = "")
+plot(decomposition_2000$trend, ylab = "Tendencia", xlab = "")
 abline(lm(decomposition_2000$x ~ time(decomposition_2000$x)), col = "red")
 
 ## fin Descomposición de la serie de tiempo ###
@@ -78,8 +80,9 @@ plot(Datos_Hist_2000$Fecha, KCN4_2000, type = "l", xlab = "Fecha",
 #install.packages("urca")
 library(urca)
 
-adf_test <- ur.df(KCN4_2000, type = "trend", lags = 1)
+adf_test <- ur.df(KCN4_2000, type = "none", lags =1)
 summary(adf_test)
+
 
 ### AUTOCORRELACIÓN por año ### 
 
