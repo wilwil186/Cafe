@@ -6,7 +6,7 @@ datosHist <- read.csv('datosHist.csv')
 datosHist$Fecha <- as.Date(datosHist$Fecha)
 ### fin Datos ###
 
-### Series de tiempo ###
+### Series de timepo ###
 ## Serie de tiempo de todos los datos ##
 KCN4 <- ts(datosHist$precio_promedio,freq=12)
 plot(datosHist$Fecha, KCN4, type = "l", xlab = "Fecha", 
@@ -33,14 +33,13 @@ plot(Datos_Hist_2000$Fecha, KCN4_2000, type = "l", xlab = "Fecha",
 ### Cálculo de la variación de las series de tiempo ###
 
 #plot(diff(KCN4)) # calculo de la variación
-#plot(log(KCN4)) #  útil para estabilizar la varianza y 
-#transformar los datos en una escala logarítmica.
+#plot(log(KCN4)) #  útil para estabilizar la varianza y transformar los datos en una escala logarítmica.
 plot(diff(log(KCN4))) 
 abline(h=0)
 
 #plot(diff(KCN4_2000)) # calculo de la variación
 #plot(log(KCN4_2000)) #  útil para estabilizar la varianza y transformar los datos en una escala logarítmica.
-plot(diff(log(KCN4_2000)))
+plot(diff(log(KCN4_2000))) 
 abline(h=0)
 ### fin Cálculo de la variación de las series de tiempo ###
 
@@ -64,8 +63,7 @@ plot(decomposition_2000$seasonal, ylab = "Estacionalidad", xlab = "")
 plot(decomposition_2000$random, ylab = "Residuales", xlab = "")
 
 par(mfrow = c(1, 1)) # normal
-#plot(decomposition_2000$x, ylab = "Serie de Tiempo Original", xlab = "")
-plot(decomposition_2000$trend, ylab = "Tendencia", xlab = "")
+plot(decomposition_2000$x, ylab = "Serie de Tiempo Original", xlab = "")
 abline(lm(decomposition_2000$x ~ time(decomposition_2000$x)), col = "red")
 
 ## fin Descomposición de la serie de tiempo ###
@@ -77,36 +75,20 @@ plot(Datos_Hist_2000$Fecha, KCN4_2000, type = "l", xlab = "Fecha",
 
 ### Estacionariedad ### 
 
+
 #install.packages("urca")
 library(urca)
 
-adf_test <- ur.df(KCN4_2000, type = "none", lags =1)
-summary(adf_test)
+adf_test <- ur.df(KCN4_2000, type = "trend", lags = 1)
+
+summary_text <- capture.output(summary(adf_test))
+tail_summary <- tail(summary_text, n = 11)
+tail_summary_df <- data.frame(tail_summary)
+colnames(tail_summary_df) <- c("Resumen")
+tail_summary_df
 
 
-### AUTOCORRELACIÓN por año ### 
+library(knitr)
 
-year <- as.integer(readline(prompt = "Ingrese el año a analizar +
-                            (entre 1980 y 2023): "))
-
-# Verificar que el año ingresado esté dentro del rango válido
-if (year < 1980 || year > 2023) {
-  cat("Año inválido. Ingrese un año entre 1980 y 2023.\n")
-} else {
-  # Crear el nombre de la variable de la serie de tiempo
-  kc_name <- paste0("KCN4_", year)
-  
-  # Calcular y graficar la autocorrelación para el año seleccionado
-  autocorrelation <- acf(get(kc_name), type = "correlation", plot = FALSE)
-  plot(autocorrelation)
-}
-
-
-
-
-
-
-
-
-
-
+kable(tail[1], format = "html")
+### AUTOCORRELACIÓN por año #

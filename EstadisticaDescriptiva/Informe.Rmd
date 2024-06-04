@@ -1,10 +1,15 @@
 ---
-title: "Informe del Análisis Descriptivo"
-author: "Santiago Montejo, Angel Granados, Wilson Jerez"
-date: "Abril 2024"
+title: "Análisis Descriptivo De la Serie de Tiempo del Café"
+author: "Angel Granados, Wilson Jerez, Santigo Montejo"
+date: "Mayo 2024"
 output:
-  beamer_presentation: 
+  beamer_presentation:
     theme: "Warsaw"
+    keep_tex: true
+    pandoc_args: [
+      "-V", "classoption=aspectratio=1612",
+      "-V", "fontsize=10pt"
+    ]
 ---
 
 
@@ -117,18 +122,24 @@ plot(decomposition_2000$trend,
 
 # Estacionariedad
 
+$$H_0: \text{no es estacionaria.}$$
+$$H_1: \text{Es estacionaria}$$
 ```{r}
 #install.packages("urca")
 library(urca)
 adf_test <- ur.df(KCN4_2000, type = "trend", lags = 1)
-summary(adf_test)
+summary_text <- capture.output(summary(adf_test))
+tail_summary <- tail(summary_text, n = 11)
+tail_summary_df <- data.frame(tail_summary)
+colnames(tail_summary_df) <- c("Resumen")
 ```
 
-# AUTOCORRELACIÓN por año
+#
 
 ```{r}
-autocorrelation <- acf(KCN4_2000, type = "correlation")
+tail_summary_df
 ```
+
 
 # Conclusión
 En este informe, se han analizado y visualizado los precios del café a lo largo del tiempo utilizando técnicas de análisis 

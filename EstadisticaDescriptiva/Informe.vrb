@@ -1,9 +1,22 @@
-\frametitle{AUTOCORRELACIÓN por año}
-\phantomsection\label{autocorrelaciuxf3n-por-auxf1o}
+\frametitle{}
+\phantomsection\label{section-6}
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{autocorrelation }\OtherTok{\textless{}{-}} \FunctionTok{acf}\NormalTok{(KCN4\_2000, }\AttributeTok{type =} \StringTok{"correlation"}\NormalTok{)}
+\NormalTok{tail\_summary\_df}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Informe_files/figure-beamer/unnamed-chunk-14-1.pdf}
+\begin{verbatim}
+##                                                    Resumen
+## 1  F-statistic: 8.203 on 3 and 244 DF,  p-value: 3.185e-05
+## 2
+## 3
+## 4      Value of test-statistic is: -4.6517 7.7753 10.8352
+## 5
+## 6                    Critical values for test statistics:
+## 7                                         1pct  5pct 10pct
+## 8                                   tau3 -3.99 -3.43 -3.13
+## 9                                   phi2  6.22  4.75  4.07
+## 10                                  phi3  8.43  6.49  5.47
+## 11
+\end{verbatim}
