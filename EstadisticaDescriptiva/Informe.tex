@@ -156,24 +156,120 @@
 
 \begin{frame}{Introducción}
 \phantomsection\label{introducciuxf3n}
-El presente informe tiene como objetivo analizar y visualizar los
-precios del café a lo largo del tiempo. Se utilizarán técnicas de
-análisis descriptivo para explorar las tendencias y patrones en los
-datos.
+Nuestro objetivo en este análisis es determinar si los precios del café
+a lo largo del tiempo son estacionarios o no, utilizando la prueba de
+Dickey-Fuller. Para lograr esto, exploraremos los datos de precios del
+café desde 1980 hasta 2023, prestando especial atención al
+comportamiento en el año 2000. Identificaremos las bajas significativas
+en los precios según los registros de la bolsa de valores y evaluaremos
+la confiabilidad de la inversión en este sector. Esto lo haremos
+analizando la mayor caída en los precios del café durante este período y
+explorando las oportunidades que podrían surgir en futuras caídas.
 \end{frame}
 
-\begin{frame}[fragile]{Carga de bibliotecas y datos}
-\phantomsection\label{carga-de-bibliotecas-y-datos}
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(ggplot2)}
-\FunctionTok{library}\NormalTok{(urca)}
+\begin{frame}{Temáticas}
+\phantomsection\label{temuxe1ticas}
+Utilizando conceptos estadísticos como las series de tiempo y la prueba
+de Dickey-Fuller, derivada de la teoría de series de tiempo,
+determinaremos si los precios del café son estacionarios. La hipótesis
+nula \((H0)\) en la prueba de Dickey-Fuller será que los precios no son
+estacionarios, mientras que la hipótesis alternativa \((H1)\) será que
+los precios son estacionarios. Adicionalmente, evaluaremos la
+estacionalidad presente en los datos, que se manifiesta en patrones
+recurrentes a lo largo del tiempo.
 
-\FunctionTok{setwd}\NormalTok{(}\StringTok{"\textasciitilde{}/Documentos/Cafe"}\NormalTok{) }\CommentTok{\# Establecer ruta de trabajo}
-\NormalTok{datosHist }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{\textquotesingle{}datosHist.csv\textquotesingle{}}\NormalTok{)}
-\NormalTok{datosHist}\SpecialCharTok{$}\NormalTok{Fecha }\OtherTok{\textless{}{-}} \FunctionTok{as.Date}\NormalTok{(datosHist}\SpecialCharTok{$}\NormalTok{Fecha)}
-\end{Highlighting}
-\end{Shaded}
+A través de este análisis, plantearemos y probaremos la hipótesis nula
+de no estacionariedad y confirmaremos la presencia de estacionalidad.
+\end{frame}
+
+\begin{frame}{Serie de Tiempo}
+\phantomsection\label{serie-de-tiempo}
+Una serie de tiempo es una secuencia de datos recolectados y ordenados
+cronológicamente, generalmente a intervalos regulares, como diarios,
+mensuales, trimestrales o anuales. Estas series se utilizan para
+analizar cómo una variable cambia a lo largo del tiempo y son
+fundamentales en campos como la economía, la meteorología, la
+ingeniería, y muchas otras disciplinas.
+\end{frame}
+
+\begin{frame}{Conceptos Importantes}
+\phantomsection\label{conceptos-importantes}
+\begin{enumerate}
+
+  \item Estacionariedad:
+  
+  \item Tendencia
+  
+  \item Estacionalidad
+  
+  \item Ruido
+  
+  \item Prueba de Dickey-Fuller
+  
+  \item Modelos ARIMA (Autoregressive Integrated Moving Average)
+  
+  
+
+
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Descripcion de la Base de Datos}
+\phantomsection\label{descripcion-de-la-base-de-datos}
+La base de datos utilizada para este análisis contiene información sobre
+los precios del café, obtenida del sitio web Investing. Los datos
+abarcan el período comprendido entre los años 1980 y 2023. Son datos
+diarios que no abordan los fines de semana (Sabado y Domingo) y se
+consideran dos Variables que son el tiempo (Expresado en Dias, Meses y
+años) y el precio promedio diario.
+\end{frame}
+
+\begin{frame}[fragile]{Descripcion de la Base de Datos}
+\phantomsection\label{descripcion-de-la-base-de-datos-1}
+\begin{verbatim}
+## 'data.frame':    11152 obs. of  8 variables:
+##  $ Fecha          : Date, format: "1979-12-27" "1979-12-28" ...
+##  $ Último         : num  183 182 182 178 172 ...
+##  $ Apertura       : num  188 183 182 182 176 ...
+##  $ Máximo         : num  188 186 183 182 176 ...
+##  $ Mínimo         : num  183 181 181 176 170 ...
+##  $ Vol.           : chr  "" "" "" "1,14K" ...
+##  $ X..var.        : chr  "-2,23%" "-0,90%" "0,12%" "-2,29%" ...
+##  $ precio_promedio: num  186 183 182 179 174 ...
+\end{verbatim}
+\end{frame}
+
+\begin{frame}{Descripcion de la Base de Datos}
+\phantomsection\label{descripcion-de-la-base-de-datos-2}
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-2-1.pdf}
+\end{frame}
+
+\begin{frame}{Descripcion de la Base de Datos}
+\phantomsection\label{descripcion-de-la-base-de-datos-3}
+\begin{itemize}
+\item
+  Forma de la Distribución: Observando la forma del histograma, se puede
+  identificar si los precios del café están distribuidos simétricamente,
+  sesgados a la izquierda.
+\item
+  Centralidad: El centro de la distribución se puede estimar visualmente
+  observando dónde se concentran los valores más frecuentes.
+\item
+  Dispersión: La dispersión de los datos puede ser evaluada observando
+  la amplitud de los bins en el histograma y también considerando la
+  varianza o el rango intercuartil (IQR). Un sesgo hacia la izquierda
+  típicamente implica una menor dispersión hacia los valores más altos.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Descripcion de la Base de Datos}
+\phantomsection\label{descripcion-de-la-base-de-datos-4}
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-3-1.pdf}
+\end{frame}
+
+\begin{frame}{Descripcion de la Base de Datos}
+\phantomsection\label{descripcion-de-la-base-de-datos-5}
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-4-1.pdf}
 \end{frame}
 
 \begin{frame}[fragile]{Serie de tiempo de todos los datos}
@@ -186,7 +282,7 @@ datos.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Informe_files/figure-beamer/unnamed-chunk-2-1.pdf}
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-5-1.pdf}
 \end{frame}
 
 \begin{frame}[fragile]{Serie de tiempo por año}
@@ -220,31 +316,17 @@ datos.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Informe_files/figure-beamer/unnamed-chunk-4-1.pdf}
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-7-1.pdf}
 \end{frame}
 
-\begin{frame}[fragile]{Cálculo de la variación de las series de tiempo}
+\begin{frame}{Cálculo de la variación de las series de tiempo}
 \phantomsection\label{cuxe1lculo-de-la-variaciuxf3n-de-las-series-de-tiempo}
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{plot}\NormalTok{(}\FunctionTok{diff}\NormalTok{(}\FunctionTok{log}\NormalTok{(KCN4))) }
-\FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{0}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Informe_files/figure-beamer/unnamed-chunk-5-1.pdf}
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-8-1.pdf}
 \end{frame}
 
-\begin{frame}[fragile]{}
+\begin{frame}{}
 \phantomsection\label{section-1}
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{plot}\NormalTok{(}\FunctionTok{diff}\NormalTok{(}\FunctionTok{log}\NormalTok{(KCN4\_2000))) }
-\FunctionTok{abline}\NormalTok{(}\AttributeTok{h=}\DecValTok{0}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Informe_files/figure-beamer/unnamed-chunk-6-1.pdf}
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-9-1.pdf}
 \end{frame}
 
 \begin{frame}[fragile]{Descomposición de la serie de tiempo}
@@ -258,7 +340,7 @@ datos.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Informe_files/figure-beamer/unnamed-chunk-7-1.pdf}
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-10-1.pdf}
 \end{frame}
 
 \begin{frame}[fragile]{}
@@ -270,7 +352,7 @@ datos.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Informe_files/figure-beamer/unnamed-chunk-8-1.pdf}
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-11-1.pdf}
 \end{frame}
 
 \begin{frame}[fragile]{}
@@ -282,7 +364,7 @@ datos.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Informe_files/figure-beamer/unnamed-chunk-9-1.pdf}
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-12-1.pdf}
 \end{frame}
 
 \begin{frame}[fragile]{}
@@ -294,7 +376,7 @@ datos.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Informe_files/figure-beamer/unnamed-chunk-10-1.pdf}
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-13-1.pdf}
 \end{frame}
 
 \begin{frame}[fragile]{Análisis de tendencia}
@@ -308,7 +390,7 @@ datos.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Informe_files/figure-beamer/unnamed-chunk-11-1.pdf}
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-14-1.pdf}
 \end{frame}
 
 \begin{frame}[fragile]{}
@@ -320,33 +402,12 @@ datos.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Informe_files/figure-beamer/unnamed-chunk-12-1.pdf}
+\includegraphics{Informe_files/figure-beamer/unnamed-chunk-15-1.pdf}
 \end{frame}
 
 \begin{frame}[fragile]{Estacionariedad}
 \phantomsection\label{estacionariedad}
-\[H_0: \text{no es estacionaria.}\] \[H_1: \text{Es estacionaria}\]
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#install.packages("urca")}
-\FunctionTok{library}\NormalTok{(urca)}
-\NormalTok{adf\_test }\OtherTok{\textless{}{-}} \FunctionTok{ur.df}\NormalTok{(KCN4\_2000, }\AttributeTok{type =} \StringTok{"trend"}\NormalTok{, }\AttributeTok{lags =} \DecValTok{1}\NormalTok{)}
-\NormalTok{summary\_text }\OtherTok{\textless{}{-}} \FunctionTok{capture.output}\NormalTok{(}\FunctionTok{summary}\NormalTok{(adf\_test))}
-\NormalTok{tail\_summary }\OtherTok{\textless{}{-}} \FunctionTok{tail}\NormalTok{(summary\_text, }\AttributeTok{n =} \DecValTok{11}\NormalTok{)}
-\NormalTok{tail\_summary\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(tail\_summary)}
-\FunctionTok{colnames}\NormalTok{(tail\_summary\_df) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Resumen"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-\end{frame}
-
-\begin{frame}[fragile]{}
-\phantomsection\label{section-6}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{tail\_summary\_df}
-\end{Highlighting}
-\end{Shaded}
+\[H_0: \text{No es estacionaria.}\] \[H_1: \text{Es estacionaria}\]
 
 \begin{verbatim}
 ##                                                    Resumen
@@ -366,12 +427,45 @@ datos.
 
 \begin{frame}{Conclusión}
 \phantomsection\label{conclusiuxf3n}
-En este informe, se han analizado y visualizado los precios del café a
-lo largo del tiempo utilizando técnicas de análisis descriptivo. Se han
-identificado tendencias y patrones en los datos, y se han aplicado
-técnicas de estabilización de la v arianza y descomposición de la serie
-de tiempo. Además, se ha calculado y graficado la autocorrelación para
-cada año.
+Basado en el resumen del test de Dickey-Fuller aumentado (ADF) para
+verificar la estacionariedad de la serie de tiempo de los precios del
+café (KCN4\_2000)
+
+\textbf{Planteamiento de la Hipótesis del Test de Dickey-Fuller:}
+
+-Hipótesis Nula (H0): La serie de tiempo NO es estacionaria.
+
+-Hipótesis Alternativa (H1): La serie de tiempo es estacionaria.
+
+\textbf{Resultado del Test}
+
+El valor p obtenido del test de Dickey-Fuller Aumentado es 3.185e-05,
+que es significativamente menor que cualquier nivel de significancia
+comúnmente utilizado (como 1\%, 5\% o 10\%). Esto indica una fuerte
+evidencia en contra de la hipótesis nula (H0) de que la serie de tiempo
+es estacionaria.
+
+Esta conclusión sirve para el análisis y la predicción de los precios
+del café, ya que una serie estacionaria permite utilizar modelos
+adecuados de series temporales, como los modelos ARIMA, para realizar
+pronósticos más precisos y confiables.
+\end{frame}
+
+\begin{frame}{Referencias}
+\phantomsection\label{referencias}
+\begin{itemize}
+\item
+  Walpole, R. E., Myers, R. H., Myers, S. L., \& Ye, K. (2020).
+  Probabilidad y estadística para ingeniería y ciencias (9.a ed., L. E.
+  Pineda Ayala, Trad.). Pearson.
+\item
+  Wackerly, D. D., Mendenhall III, W., \& Scheaffer, R. L. (2010).
+  Estadística matemática con aplicaciones (7.a ed., J. H. Romo Muñoz,
+  Trad.). Cengage Learning.
+\item
+  Brockwell, P. J., \& Davis, R. A. (2002). Introduction to Time Series
+  and Forecasting (2nd ed.). Springer.
+\end{itemize}
 \end{frame}
 
 \end{document}

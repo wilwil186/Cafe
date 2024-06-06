@@ -1,10 +1,6 @@
-\frametitle{}
-\phantomsection\label{section-6}
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{tail\_summary\_df}
-\end{Highlighting}
-\end{Shaded}
+\frametitle{Estacionariedad}
+\phantomsection\label{estacionariedad}
+\[H_0: \text{No es estacionaria.}\] \[H_1: \text{Es estacionaria}\]
 
 \begin{verbatim}
 ##                                                    Resumen

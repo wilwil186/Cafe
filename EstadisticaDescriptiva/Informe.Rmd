@@ -14,26 +14,129 @@ output:
 
 
 # Introducción
-El presente informe tiene como objetivo analizar y visualizar los precios del café a lo largo del tiempo. Se utilizarán técnicas de análisis descriptivo para explorar las tendencias y patrones en los datos.
 
-# Carga de bibliotecas y datos
-```{r}
+Nuestro objetivo en este análisis es determinar si los precios del café a lo largo del tiempo son estacionarios o no, utilizando la prueba de Dickey-Fuller. Para lograr esto, exploraremos los datos de precios del café desde 1980 hasta 2023, prestando especial atención al comportamiento en el año 2000. Identificaremos las bajas significativas en los precios según los registros de la bolsa de valores y evaluaremos la confiabilidad de la inversión en este sector. Esto lo haremos analizando la mayor caída en los precios del café durante este período y explorando las oportunidades que podrían surgir en futuras caídas.
+
+# Temáticas 
+
+Utilizando conceptos estadísticos como las series de tiempo y la prueba de Dickey-Fuller, derivada de la teoría de series de tiempo, determinaremos si los precios del café son estacionarios. La hipótesis nula $(H0)$ en la prueba de Dickey-Fuller será que los precios no son estacionarios, mientras que la hipótesis alternativa $(H1)$ será que los precios son estacionarios. Adicionalmente, evaluaremos la estacionalidad presente en los datos, que se manifiesta en patrones recurrentes a lo largo del tiempo.
+
+A través de este análisis, plantearemos y probaremos la hipótesis nula de no estacionariedad y confirmaremos la presencia de estacionalidad.
+
+
+# Serie de Tiempo
+
+Una serie de tiempo es una secuencia de datos recolectados y ordenados cronológicamente, generalmente a intervalos regulares, como diarios, mensuales, trimestrales o anuales. Estas series se utilizan para analizar cómo una variable cambia a lo largo del tiempo y son fundamentales en campos como la economía, la meteorología, la ingeniería, y muchas otras disciplinas.
+
+# Conceptos Importantes
+
+\begin{enumerate}
+
+  \item Estacionariedad:
+  
+  \item Tendencia
+  
+  \item Estacionalidad
+  
+  \item Ruido
+  
+  \item Prueba de Dickey-Fuller
+  
+  \item Modelos ARIMA (Autoregressive Integrated Moving Average)
+  
+  
+
+
+\end{enumerate}
+
+# Descripcion de la Base de Datos
+
+La base de datos utilizada para este análisis contiene información sobre los precios del café, obtenida del sitio web Investing. Los datos abarcan el período comprendido entre los años 1980 y 2023. Son datos diarios que no abordan los fines de semana (Sabado y Domingo) y se consideran dos Variables que son el tiempo (Expresado en Dias, Meses y años) y el precio promedio diario. 
+
+
+
+# Descripcion de la Base de Datos
+
+```{r,echo = FALSE, message=FALSE}
+
 library(ggplot2)
 library(urca)
+library(dplyr)
+library(tidyr)
+library(magick)
+library(summarytools)
+library(forecast)
 
-setwd("~/Documentos/Cafe") # Establecer ruta de trabajo
+setwd("~/Descargas/universidad/estadistica/github_cafe/Cafe") # Establecer ruta de trabajo
 datosHist <- read.csv('datosHist.csv')
 datosHist$Fecha <- as.Date(datosHist$Fecha)
+str(datosHist)
+
 ```
 
 
+# Descripcion de la Base de Datos
+
+```{r, echo = FALSE}
+
+# Histograma de los precios del café
+histograma <- ggplot(datosHist, aes(x = precio_promedio)) +
+  geom_histogram(binwidth = 0.1, fill = "blue", color = "black", alpha = 0.7) +
+  labs(title = "Distribución de los Precios del Café", x = "Precio Promedio", y = "Frecuencia")
+ggsave("histograma_precio_cafe.png", plot = histograma, width = 4, height = 2)
+print(histograma)
+
+```
+
+
+# Descripcion de la Base de Datos
+
+
+- Forma de la Distribución: Observando la forma del histograma, se puede identificar si los precios del café están distribuidos simétricamente, sesgados a la izquierda.
+
+- Centralidad: El centro de la distribución se puede estimar visualmente observando dónde se concentran los valores más frecuentes.
+
+- Dispersión: La dispersión de los datos puede ser evaluada observando la amplitud de los bins en el histograma y también considerando la varianza o el rango intercuartil (IQR). Un sesgo hacia la izquierda típicamente implica una menor dispersión hacia los valores más altos.
+
+
+# Descripcion de la Base de Datos
+
+```{r, echo = FALSE }
+
+# Gráfico de densidad de los precios del café
+densidad <- ggplot(datosHist, aes(x = precio_promedio)) +
+  geom_density(fill = "blue", alpha = 0.7) +
+  labs(title = "Densidad de los Precios del Café", x = "Precio Promedio", y = "Densidad")
+print(densidad)
+
+```
+
+
+
+# Descripcion de la Base de Datos
+
+```{r, echo = FALSE }
+# Diagrama de caja de los precios del café
+caja <- ggplot(datosHist, aes(y = precio_promedio)) +
+  geom_boxplot(fill = "blue", color = "black", alpha = 0.7) +
+  labs(title = "Diagrama de Caja de los Precios del Café", y = "Precio Promedio")
+print(caja)
+```
+
+
+
 # Serie de tiempo de todos los datos
+
 
 ```{r}
 KCN4 <- ts(datosHist$precio_promedio,freq=12)
 plot(datosHist$Fecha, KCN4, type = "l", xlab = "Fecha", 
      ylab = "Precio Promedio", main = "Precios del Café")
 ```
+
+
+
+
 
 # Serie de tiempo por año 
 
@@ -62,17 +165,27 @@ plot(Datos_Hist_2000$Fecha, KCN4_2000, type = "l",
 ```
 
 
+
 # Cálculo de la variación de las series de tiempo 
 
-```{r}
-plot(diff(log(KCN4))) 
+```{r, echo = FALSE }
+datos_diff<- tail(datosHist, -1)
+plot(datos_diff$Fecha,diff(log(KCN4)),type="l",
+     main = "Variación en cada año", 
+     xlab = "Fecha", 
+     ylab = "Variación logarítmica") 
 abline(h=0)
 
 ```
 
 #
-```{r}
-plot(diff(log(KCN4_2000))) 
+```{r, echo = FALSE}
+
+datos_diff_2000 <- tail(Datos_Hist_2000, -1)
+plot(datos_diff_2000$Fecha,diff(log(KCN4_2000)),type="l",
+     main = "Variación en el año 2000", 
+     xlab = "Fecha", 
+     ylab = "Variación logarítmica") 
 abline(h=0)
 ```
 
@@ -122,9 +235,10 @@ plot(decomposition_2000$trend,
 
 # Estacionariedad
 
-$$H_0: \text{no es estacionaria.}$$
+$$H_0: \text{No es estacionaria.}$$
 $$H_1: \text{Es estacionaria}$$
-```{r}
+
+```{r, echo = FALSE}
 #install.packages("urca")
 library(urca)
 adf_test <- ur.df(KCN4_2000, type = "trend", lags = 1)
@@ -132,16 +246,31 @@ summary_text <- capture.output(summary(adf_test))
 tail_summary <- tail(summary_text, n = 11)
 tail_summary_df <- data.frame(tail_summary)
 colnames(tail_summary_df) <- c("Resumen")
-```
 
-#
-
-```{r}
 tail_summary_df
 ```
 
 
 # Conclusión
-En este informe, se han analizado y visualizado los precios del café a lo largo del tiempo utilizando técnicas de análisis 
-descriptivo. Se han identificado tendencias y patrones en los datos, y se han aplicado técnicas de estabilización de la v
-arianza y descomposición de la serie de tiempo. Además, se ha calculado y graficado la autocorrelación para cada año.
+
+Basado en el resumen del test de Dickey-Fuller aumentado (ADF) para verificar la estacionariedad de la serie de tiempo de los precios del café (KCN4_2000)
+
+  \textbf{Planteamiento de la Hipótesis del Test de Dickey-Fuller:}
+
+-Hipótesis Nula (H0): La serie de tiempo NO es estacionaria.
+
+-Hipótesis Alternativa (H1): La serie de tiempo es estacionaria.
+
+\textbf{Resultado del Test}
+
+El valor p obtenido del test de Dickey-Fuller Aumentado es 3.185e-05, que es significativamente menor que cualquier nivel de significancia comúnmente utilizado (como 1%, 5% o 10%). Esto indica una fuerte evidencia en contra de la hipótesis nula (H0) de que la serie de tiempo es estacionaria.
+
+Esta conclusión sirve para el análisis y la predicción de los precios del café, ya que una serie estacionaria permite utilizar modelos adecuados de series temporales, como los modelos ARIMA, para realizar pronósticos más precisos y confiables.
+
+# Referencias
+
+- Walpole, R. E., Myers, R. H., Myers, S. L., & Ye, K. (2020). Probabilidad y estadística para ingeniería y ciencias (9.a ed., L. E. Pineda Ayala, Trad.). Pearson.
+
+- Wackerly, D. D., Mendenhall III, W., & Scheaffer, R. L. (2010). Estadística matemática con aplicaciones (7.a ed., J. H. Romo Muñoz, Trad.). Cengage Learning.
+
+- Brockwell, P. J., & Davis, R. A. (2002). Introduction to Time Series and Forecasting (2nd ed.). Springer.
