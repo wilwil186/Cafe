@@ -268,7 +268,7 @@ Basado en el resumen del test de Dickey-Fuller aumentado (ADF) para verificar la
 
 \textbf{Resultado del Test}
 
-El valor p obtenido del test de Dickey-Fuller Aumentado es 3.185e-05, que es significativamente menor que cualquier nivel de significancia comúnmente utilizado (como 1%, 5% o 10%). Esto indica una fuerte evidencia en contra de la hipótesis nula (H0), lo cuál acepta de que la serie de tiempo  es estacionaria.
+El valor p obtenido del test de Dickey-Fuller Aumentado es 3.185e-05, que es significativamente menor que cualquier nivel de significancia comúnmente utilizado (como 1%, 5% o 10%). Esto indica una fuerte evidencia en contra de la hipótesis nula (H0), lo cuál acepta la hipótesis alterna (H1) de que la serie de tiempo  es estacionaria.
 
 Esta conclusión sirve para el análisis y la predicción de los precios del café, ya que una serie estacionaria permite utilizar modelos adecuados de series temporales, como los modelos ARIMA, para realizar pronósticos más precisos y confiables.
 
