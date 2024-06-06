@@ -34,12 +34,21 @@ plot(Datos_Hist_2000$Fecha, KCN4_2000, type = "l", xlab = "Fecha",
 
 #plot(diff(KCN4)) # calculo de la variación
 #plot(log(KCN4)) #  útil para estabilizar la varianza y transformar los datos en una escala logarítmica.
-plot(diff(log(KCN4))) 
+datos_diff<- tail(datosHist, -1)
+plot(datos_diff$Fecha,diff(log(KCN4)),type="l",
+     main = "Variación en cada año", 
+     xlab = "Fecha", 
+     ylab = "Variación logarítmica") 
 abline(h=0)
+
 
 #plot(diff(KCN4_2000)) # calculo de la variación
 #plot(log(KCN4_2000)) #  útil para estabilizar la varianza y transformar los datos en una escala logarítmica.
-plot(diff(log(KCN4_2000))) 
+datos_diff_2000 <- tail(Datos_Hist_2000, -1)
+plot(datos_diff_2000$Fecha,diff(log(KCN4_2000)),type="l",
+     main = "Variación en cada año", 
+     xlab = "Fecha", 
+     ylab = "Variación logarítmica") 
 abline(h=0)
 ### fin Cálculo de la variación de las series de tiempo ###
 
