@@ -1,7 +1,7 @@
 ---
 title: "Análisis Descriptivo De la Serie de Tiempo del Café"
-author: "Angel Granados, Wilson Jerez, Santigo Montejo"
-date: "Mayo 2024"
+author: "Angel Granados, Wilson Jerez, Santiago Montejo"
+date: "Junio 2024"
 output:
   beamer_presentation:
     theme: "Warsaw"
