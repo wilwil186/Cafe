@@ -28,6 +28,11 @@ A través de este análisis, plantearemos y probaremos la hipótesis nula de no 
 
 Una serie de tiempo es una secuencia de datos recolectados y ordenados cronológicamente, generalmente a intervalos regulares, como diarios, mensuales, trimestrales o anuales. Estas series se utilizan para analizar cómo una variable cambia a lo largo del tiempo y son fundamentales en campos como la economía, la meteorología, la ingeniería, y muchas otras disciplinas.
 
+\begin{center}
+\includegraphics[width=0.65\textwidth]{st.jpeg}
+\end{center}
+
+
 # Conceptos Importantes
 
 \begin{enumerate}
@@ -45,9 +50,9 @@ Una serie de tiempo es una secuencia de datos recolectados y ordenados cronológ
   \item Modelos ARIMA (Autoregressive Integrated Moving Average)
   
   
-
-
 \end{enumerate}
+
+
 
 # Descripcion de la Base de Datos
 
